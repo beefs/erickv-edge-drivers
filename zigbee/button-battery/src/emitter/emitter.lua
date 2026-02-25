@@ -69,6 +69,9 @@ local function send_knob_event(_, device, zbrx)
 end
 
 
+-- Single handler for all button components (main and button2/3/4); behavior is identical,
+-- only the endpoint from the Zigbee message differs (1=main, 2=button2, 3=button3, 4=button4).
+--
 -- handles incoming ZigbeeMessageRx
 -- for button-specific events and
 -- sends device event accordingly
@@ -102,8 +105,7 @@ local function send_button_capability_setup(device, buttons_number, button_event
       device,
       button.numberOfButtons(buttons_number)))
 
-    -- configure supported values for
-    -- each profile component
+    -- Set supportedButtonValues for every button endpoint (1..buttons_number) so all buttons have the same capabilities as main.
     for ep=1, buttons_number do
       assert(_send_device_event(
         ep,

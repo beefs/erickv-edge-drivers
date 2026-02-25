@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 name: 4-button-battery
+# All button components (main, button2, button3, button4) are defined identically so Main, Button 2, 3, and 4 behave the same.
 components:
   - id: main
     capabilities:

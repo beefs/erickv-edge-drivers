@@ -57,7 +57,9 @@ end
 -- init lifecycle
 --
 -- handler component vs endpoint
--- configuration for consistency
+-- configuration for consistency.
+-- Also sets supportedButtonValues for all button components so every button
+-- shows the same event list (e.g. after "Select different driver" when added() did not run).
 --
 -- @param device ZigbeeDevice
 local function init(_, device)
@@ -67,13 +69,20 @@ local function init(_, device)
   if device:supports_capability_by_id(switch_level.ID) then
     device:emit_event(switch_level.level(50))
   end
+
+  if device:supports_capability_by_id(button.ID) then
+    send_button_capability_setup(
+      device,
+      device:component_count() - 1,
+      { "pushed", "double", "held" })
+  end
 end
 
 
 -- added lifecycle
 --
 -- handles initual
--- state configuration
+-- state configuration. Capability setup applies the same button events to all button components (main + button2/3/4 for 4-button devices).
 --
 -- @param device ZigbeeDevice
 local function added(_, device)
